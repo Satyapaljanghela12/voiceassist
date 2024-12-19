@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpO₂ Data</title>
+    <style>
+        /* General Page Styling (same as before) */
+    </style>
+</head>
+<body>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Hour</th>
+                <th>SpO₂ (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>00:00</td><td>97</td></tr>
+            <!-- More rows here -->
+        </tbody>
+    </table>
+</div>
+
+<div class="graph-container">
+    <canvas id="spo2Chart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('spo2Chart').getContext('2d');
+    const spo2Data = {
+        labels: ['00:00', '01:00', '02:00', '03:00'], // Simplified for brevity
+        datasets: [{
+            label: 'SpO₂ (%)',
+            data: [97, 96, 95, 94], // Simplified for brevity
+            backgroundColor: '#FF6347',
+            borderColor: '#fff',
+            borderWidth: 2,
+            fill: true,
+        }]
+    };
+
+    const spo2Config = {
+        type: 'bar',
+        data: spo2Data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    enabled: true,
+                },
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                },
+            },
+        }
+    };
+
+    const spo2Chart = new Chart(ctx, spo2Config);
+
+    // Speech Recognition setup for "back" command
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onstart = function() {
+        console.log("Voice recognition started. Speak now.");
+    };
+
+    recognition.onresult = function(event) {
+        const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
+        console.log("You said: " + command);
+        if (command.includes('back')) {
+            goBack(); // Call the function to return to the main page
+        }
+    };
+
+    function goBack() {
+        window.location.href = 'copy1.html'; // Redirect to the main robot face page
+    }
+
+    recognition.start();
+</script>
+
+</body>
+</html>

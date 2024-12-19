@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Schedule with Voice Commands</title>
+  <style>
+    /* Styling remains the same as your original code */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      margin: 0;
+      border-radius: 8px 8px 0 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .btn.completed {
+      background-color: #9E9E9E;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .note {
+      margin: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .action-buttons {
+      margin: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .action-buttons button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+      table, th, td {
+        font-size: 12px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .action-buttons button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Hospital Schedule with Voice Commands</h1>
+  
+  <table id="scheduleTable">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Activity</th>
+        <th>Medicine Time</th>
+        <th>Meet Consultant</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>9:00 AM</td>
+        <td>Doctor's Visit</td>
+        <td>9:00 AM</td>
+        <td class="td1">Pending</td>
+        <td><span class="status" onclick="toggleStatus(this)">Pending</span></td>
+      </tr>
+      <tr>
+        <td>11:00 AM</td>
+        <td>Online Consultation</td>
+        <td>12:00 PM</td>
+        <td><a href="https://meet.google.com/your-link" target="_blank">Join Meet</a></td>
+        <td><span class="status" onclick="toggleStatus(this)">Pending</span></td>
+      </tr>
+      <tr>
+        <td>2:00 PM</td>
+        <td>Doctor's Visit</td>
+        <td>4:00 PM</td>
+        <td class="td1">Pending</td>
+        <td><span class="status" onclick="toggleStatus(this)">Pending</span></td>
+      </tr>
+      <tr>
+        <td>4:00 PM</td>
+        <td>Online Consultation</td>
+        <td>10:00 AM</td>
+        <td><a href="https://meet.google.com/hvi-ceit-ewc" target="_blank">Join Meet</a></td>
+        <td><span class="status" onclick="toggleStatus(this)">Pending</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="action-buttons">
+    <button onclick="addRow()">Add New Row</button>
+    <button onclick="deleteRow()">Delete Last Row</button>
+    <button onclick="editRow()">Edit Last Row</button>
+  </div>
+
+  <div class="note">
+    <p><strong>Note:</strong> Use voice commands like "First row completed" or "Second row connect meet".</p>
+  </div>
+</div>
+
+<script>
+  function toggleStatus(element) {
+    if (element.textContent === "Pending") {
+      element.textContent = "Completed";
+      element.style.color = "green";
+    } else {
+      element.textContent = "Pending";
+      element.style.color = "red";
+    }
+  }
+
+  function addRow() {
+    const table = document.getElementById("scheduleTable").getElementsByTagName('tbody')[0];
+    const newRow = table.insertRow(table.rows.length);
+
+    const timeCell = newRow.insertCell(0);
+    const activityCell = newRow.insertCell(1);
+    const medicineTimeCell = newRow.insertCell(2);
+    const meetCell = newRow.insertCell(3);
+    const statusCell = newRow.insertCell(4);
+
+    timeCell.innerHTML = "<input type='text' placeholder='Time'>";
+    activityCell.innerHTML = "<input type='text' placeholder='Activity'>";
+    medicineTimeCell.innerHTML = "<input type='text' placeholder='Medicine Time'>";
+    meetCell.innerHTML = "<a href='https://meet.google.com/your-link' target='_blank'>Join Meet</a>";
+    statusCell.innerHTML = "<span class='status' onclick='toggleStatus(this)'>Pending</span>";
+  }
+
+  function deleteRow() {
+    const table = document.getElementById("scheduleTable");
+    if (table.rows.length > 1) {
+      table.deleteRow(table.rows.length - 1);
+    }
+  }
+
+  function editRow() {
+    const table = document.getElementById("scheduleTable");
+    const lastRow = table.rows[table.rows.length - 1];
+    
+    const cells = lastRow.getElementsByTagName('td');
+    cells[0].innerHTML = "<input type='text' value='" + cells[0].innerText + "'>";
+    cells[1].innerHTML = "<input type='text' value='" + cells[1].innerText + "'>";
+    cells[2].innerHTML = "<input type='text' value='" + cells[2].innerText + "'>";
+    cells[3].innerHTML = "<input type='text' value='" + cells[3].innerText + "'>";
+    cells[4].innerHTML = "<span class='status' onclick='toggleStatus(this)'>Pending</span>";
+  }
+
+  // Voice recognition setup
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.lang = "en-US";
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+
+    console.log("Heard:", transcript);
+
+    const rows = document.querySelectorAll("#scheduleTable tbody tr");
+    if (transcript.includes("first row completed")) {
+      toggleStatus(rows[0].querySelector(".status"));
+    } else if (transcript.includes("second row connect meet")) {
+      rows[1].querySelector("a").click();
+    } else if (transcript.includes("back")) {
+      window.location.href = "copy1.html"; // Redirect to the main page
+    }
+  };
+
+  recognition.onerror = function(event) {
+    console.error("Speech recognition error:", event.error);
+  };
+
+  recognition.start();
+</script>
+
+</body>
+</html>

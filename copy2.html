@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot Face with Circular Shape</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #121212;
+      margin: 0;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+    }
+
+    .robot-face {
+      width: 300px;
+      height: 300px;
+      background: #f1ef5d;
+      border: 5px solid #f4f442;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 20px rgba(235, 239, 25, 0.973);
+      border-radius: 50%;
+    }
+
+    .eye-container {
+      display: flex;
+      justify-content: space-between;
+      width: 180px;
+    }
+
+    .eye {
+      width: 70px;
+      height: 70px;
+      background: #fff;
+      border: 5px solid #333;
+      border-radius: 40px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .iris {
+      width: 40px;
+      height: 40px;
+      background: #b5cd3c;
+      border: 2px solid #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pupil {
+      width: 15px;
+      height: 15px;
+      background: #000;
+      border-radius: 50%;
+    }
+
+    .eyebrows {
+      position: absolute;
+      top: 25px;
+      display: flex;
+      justify-content: space-between;
+      width: 160px;
+    }
+
+    .eyebrow {
+      width: 60px;
+      height: 10px;
+      background: #333;
+      border-radius: 5px;
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="robot-face">
+    <div class="eyebrows">
+      <div class="eyebrow" id="left-brow"></div>
+      <div class="eyebrow" id="right-brow"></div>
+    </div>
+    <div class="eye-container">
+      <div class="eye">
+        <div class="iris">
+          <div class="pupil"></div>
+        </div>
+      </div>
+      <div class="eye">
+        <div class="iris">
+          <div class="pupil"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="schedule.html"></a>
+  <a href="pdf.html"></a>
+  <a href="bloodpressure.html"></a>
+  <a href="oxygen.html"></a>
+
+  <script>
+    const pupils = document.querySelectorAll('.pupil');
+    const leftBrow = document.getElementById('left-brow');
+    const rightBrow = document.getElementById('right-brow');
+
+    // Speech Recognition setup
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onstart = function() {
+      console.log("Voice recognition started. Speak now.");
+    };
+
+    recognition.onresult = function(event) {
+      const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
+      console.log("You said: " + command);  // Log the command for debugging
+      handleVoiceCommand(command);
+    };
+
+    recognition.onerror = function(event) {
+      console.error("Error occurred in speech recognition: " + event.error);
+    };
+
+    function handleVoiceCommand(command) {
+      if (command.includes('intro')) {
+        startIntro();
+      } else if (command.includes('sad')) {
+        changeExpression('sad');
+      } else if (command.includes('happy')) {
+        changeExpression('happy');
+      } else if (command.includes('angry')) {
+        changeExpression('angry');
+      } else if (command.includes('surprised')) {
+        changeExpression('surprised');
+      } else if (command.includes('open schedule')) {
+        openSchedulePage();
+      } else if (command.includes('temperature') || command.includes('temperature page')) {
+        openTemperaturePage();
+      } else if (command.includes('blood pressure')) {
+        openBloodPressurePage(); // Open blood pressure page
+      } else if (command.includes('oxygen')) {
+        openOxygenPage(); // Open oxygen page with voice command
+      } else if (command.includes('back')) {
+        goBackToMainPage(); // Go back to the main page (robot page)
+      } else {
+        playResponse("Sorry, I didn't understand that.");
+      }
+    }
+
+    function openBloodPressurePage() {
+      window.location.href = 'bloodpressure.html'; // Redirect to the blood pressure page
+    }
+
+    function openOxygenPage() {
+      window.location.href = 'oxygen.html'; // Redirect to the oxygen page
+    }
+
+    function goBackToMainPage() {
+      window.location.href = 'robotface.html'; // Redirect to the main robot face page
+    }
+
+    function changeExpression(expression) {
+      if (expression === 'happy') {
+        // Move eyebrows up and eyes wide
+        leftBrow.style.transform = 'translateY(-10px)';
+        rightBrow.style.transform = 'translateY(-10px)';
+        pupils.forEach(pupil => pupil.style.transform = 'scale(1.2)');
+      } else if (expression === 'sad') {
+        // Move eyebrows down and eyes smaller
+        leftBrow.style.transform = 'translateY(10px)';
+        rightBrow.style.transform = 'translateY(10px)';
+        pupils.forEach(pupil => pupil.style.transform = 'scale(0.8)');
+      } else if (expression === 'angry') {
+        // Furrow brows and eyes focus
+        leftBrow.style.transform = 'translateY(0) rotate(-15deg)';
+        rightBrow.style.transform = 'translateY(0) rotate(15deg)';
+        pupils.forEach(pupil => pupil.style.transform = 'scale(1)');
+      } else if (expression === 'surprised') {
+        // Eyebrows raised and eyes wide open
+        leftBrow.style.transform = 'translateY(-20px)';
+        rightBrow.style.transform = 'translateY(-20px)';
+        pupils.forEach(pupil => pupil.style.transform = 'scale(1)');
+      }
+    }
+
+    function startIntro() {
+      const introText = "Hello! I’m your assistant robot. What can I help you with today?";
+      const utterance = new SpeechSynthesisUtterance(introText);
+      speechSynthesis.speak(utterance);
+      playResponse("You can say 'happy', 'sad', 'angry', or 'surprised' to change my expression.");
+    }
+
+    function openSchedulePage() {
+      window.location.href = 'schedule.html';
+    }
+
+    function opentemperaturePage() {
+      window.location.href = 'pdf.html';
+    }
+
+    function playResponse(responseText) {
+      const utterance = new SpeechSynthesisUtterance(responseText);
+      speechSynthesis.speak(utterance);
+    }
+
+    recognition.start();
+  </script>
+</body>
+</html>

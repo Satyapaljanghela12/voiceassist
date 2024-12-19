@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Data with 3D Bar Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        table {
+            width: 40%;
+            border-collapse: collapse;
+            margin-right: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+        canvas {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <thead>
+        <tr>
+            <th>Hour</th>
+            <th>Temperature (°C)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>00:00</td><td>37.2</td></tr>
+        <tr><td>01:00</td><td>37.1</td></tr>
+        <tr><td>02:00</td><td>37.0</td></tr>
+        <tr><td>03:00</td><td>36.9</td></tr>
+        <tr><td>04:00</td><td>36.8</td></tr>
+        <tr><td>05:00</td><td>36.8</td></tr>
+        <tr><td>06:00</td><td>37.0</td></tr>
+        <tr><td>07:00</td><td>37.2</td></tr>
+        <tr><td>08:00</td><td>37.4</td></tr>
+        <tr><td>09:00</td><td>37.6</td></tr>
+        <tr><td>10:00</td><td>37.8</td></tr>
+        <tr><td>11:00</td><td>38.0</td></tr>
+        <tr><td>12:00</td><td>38.2</td></tr>
+        <tr><td>13:00</td><td>38.3</td></tr>
+        <tr><td>14:00</td><td>38.1</td></tr>
+        <tr><td>15:00</td><td>37.9</td></tr>
+        <tr><td>16:00</td><td>37.6</td></tr>
+        <tr><td>17:00</td><td>37.4</td></tr>
+        <tr><td>18:00</td><td>37.3</td></tr>
+        <tr><td>19:00</td><td>37.1</td></tr>
+        <tr><td>20:00</td><td>37.0</td></tr>
+        <tr><td>21:00</td><td>36.9</td></tr>
+        <tr><td>22:00</td><td>36.8</td></tr>
+        <tr><td>23:00</td><td>36.8</td></tr>
+    </tbody>
+</table>
+
+<canvas id="temperatureChart"></canvas>
+
+<script>
+    const ctx = document.getElementById('temperatureChart').getContext('2d');
+    const temperatureChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00',
+                '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
+                '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
+            ],
+            datasets: [{
+                label: 'Temperature (°C)',
+                data: [
+                    37.2, 37.1, 37.0, 36.9, 36.8, 36.8, 37.0, 37.2,
+                    37.4, 37.6, 37.8, 38.0, 38.2, 38.3, 38.1, 37.9,
+                    37.6, 37.4, 37.3, 37.1, 37.0, 36.9, 36.8, 36.8
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                barPercentage: 0.5,
+                barThickness: 12
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Hourly Temperature Data (3D Effect)'
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Hours'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)'
+                    }
+                }
+            },
+            elements: {
+                bar: {
+                    borderSkipped: false,
+                    borderWidth: 2,
+                    borderRadius: 10
+                }
+            }
+        }
+    });
+
+    // Function to handle voice recognition
+    function startVoiceRecognition() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.start();
+
+        recognition.onresult = (event) => {
+            const speechResult = event.results[0][0].transcript.toLowerCase();
+            console.log("Voice input: ", speechResult);
+
+            // Check if the voice command is "back"
+            if (speechResult.includes('back')) {
+                // Redirect to the main page
+                window.location.href = "copy1.html";  // Replace with your actual main page URL
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error", event.error);
+        };
+    }
+
+    // Start voice recognition when the page loads
+    window.onload = startVoiceRecognition;
+</script>
+
+</body>
+</html>
